@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sales Performance Dashboard | Tableau | Ahmed Sherif</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0b0f19;--card:rgba(255,255,255,.03);--border:rgba(255,255,255,.08);--text:#f8fafc;--muted:#94a3b8;--dim:#64748b;--pink:#d49ac2;--purple:#8b5a89;--cyan:#38bdf8;--emerald:#34d399;--r:12px;--t:.2s cubic-bezier(.4,0,.2,1);--font:'Inter',system-ui,sans-serif}
+    body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh}
+    .topbar{position:sticky;top:0;z-index:100;background:rgba(11,15,25,.94);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:14px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+    .topbar-left{display:flex;align-items:center;gap:12px}.back-btn{display:inline-flex;align-items:center;gap:7px;color:var(--muted);text-decoration:none;font-size:.83rem;font-weight:500;padding:6px 13px;border:1px solid var(--border);border-radius:8px}.back-btn:hover{color:var(--text);border-color:rgba(255,255,255,.2)}.topbar-title{font-size:.95rem;font-weight:600}.topbar-title span,.accent{color:var(--pink)}.tableau-badge{font-size:.7rem;font-weight:600;padding:4px 11px;background:rgba(212,154,194,.1);border:1px solid rgba(212,154,194,.25);color:var(--pink);border-radius:999px;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap}
+    .hero{background:linear-gradient(135deg,#170f1a 0%,#121020 55%,#080b15 100%);border-bottom:1px solid var(--border);padding:48px 24px 40px;text-align:center}.hero h1{font-size:clamp(1.5rem,3vw,2.15rem);font-weight:700;letter-spacing:-.025em;margin-bottom:10px}.hero>p{color:var(--muted);font-size:.9rem;max-width:760px;margin:0 auto 24px;line-height:1.7}.period{font-size:.76rem!important;color:var(--dim)!important;margin-top:-14px!important}
+    .kpi-row{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}.kpi-chip{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:999px;padding:9px 18px;display:flex;align-items:center;gap:9px}.kpi-chip .num{font-size:1rem;font-weight:700}.kpi-chip .lbl{font-size:.72rem;color:var(--muted);font-weight:500}
+    .wrap{max-width:1160px;margin:0 auto;padding:40px 24px 70px}.sec-label{font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--dim);margin-bottom:18px;display:flex;align-items:center;gap:8px}.sec-label::after{content:'';flex:1;height:1px;background:var(--border)}
+    .case-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(285px,1fr));gap:15px;margin-bottom:40px}.case-card,.metric-card,.insight-card,.tool-box{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:20px 22px}.case-card h3{font-size:.98rem;margin-bottom:10px}.case-card p,.case-card li{font-size:.82rem;color:var(--muted);line-height:1.7}.case-card ul{padding-left:19px;margin-top:9px}
+    .gallery{margin-bottom:40px}.gallery-frame{border:1px solid var(--border);border-radius:var(--r);overflow:hidden;background:#fff;cursor:zoom-in}.gallery-frame img{display:block;width:100%;height:auto}.caption{font-size:.75rem;color:var(--dim);margin-top:9px;text-align:center}
+    .metric-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:13px;margin-bottom:14px}.metric-card{padding:17px 18px}.metric-card h3{font-size:.86rem;margin-bottom:7px}.metric-card p{font-size:.77rem;line-height:1.6;color:var(--muted)}.metric-value{display:block;color:var(--pink);font-size:1.04rem;font-weight:700;margin-bottom:5px}.data-note{font-size:.77rem;color:var(--muted);line-height:1.68;margin:0 0 40px;padding:14px 16px;border-left:2px solid rgba(212,154,194,.55);background:rgba(212,154,194,.045);border-radius:0 8px 8px 0}
+    .insight-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:14px;margin-bottom:40px}.insight-card{padding:18px 19px}.insight-card h3{font-size:.88rem;margin-bottom:9px}.insight-card p{font-size:.79rem;line-height:1.65;color:var(--muted)}.tool-box{display:flex;flex-wrap:wrap;gap:9px;padding:19px}
+    .tool-pill{display:inline-flex;align-items:center;gap:7px;font-size:.78rem;padding:7px 12px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:999px;color:var(--muted)}.tool-pill i{color:var(--pink)}
+    .lightbox{display:none;position:fixed;inset:0;z-index:999;background:rgba(0,0,0,.94);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:22px;cursor:zoom-out}.lightbox.open{display:flex}.lightbox img{max-width:96vw;max-height:90vh;object-fit:contain;border-radius:8px}.lb-close{position:fixed;top:16px;right:19px;background:rgba(255,255,255,.09);border:0;color:var(--text);font-size:1.2rem;width:40px;height:40px;border-radius:50%;cursor:pointer}
+    .foot{border-top:1px solid var(--border);text-align:center;padding:20px;font-size:.77rem;color:var(--dim)}.foot a{color:var(--pink);text-decoration:none}
+    @media(max-width:620px){.topbar{padding:12px 14px}.topbar-title{font-size:.82rem}.tableau-badge{font-size:.61rem;padding:4px 8px}.hero{padding:32px 16px}.wrap{padding:28px 14px 52px}}
+  </style>
+</head>
+<body>
+  <header class="topbar"><div class="topbar-left"><a href="index.html#projects" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Portfolio</a><span class="topbar-title"><span>Tableau</span> Sales Dashboard</span></div><span class="tableau-badge"><i class="fa-solid fa-chart-column"></i> Tableau Public</span></header>
+  <section class="hero">
+    <h1>Sales Performance <span class="accent">Dashboard</span></h1>
+    <p>A Tableau dashboard built from the Sales sheet to compare revenue across product lines, countries, deal sizes, and years, and to summarize sales activity at both line-item and order level.</p>
+    <p class="period">Sales dates: 6 January 2003–31 May 2005 · 2,823 sales lines · 307 distinct orders</p>
+    <div class="kpi-row">
+      <div class="kpi-chip"><span class="num" style="color:var(--pink)">10.03M</span><span class="lbl">Total Sales</span></div>
+      <div class="kpi-chip"><span class="num" style="color:var(--cyan)">2,823</span><span class="lbl">Sales Lines</span></div>
+      <div class="kpi-chip"><span class="num" style="color:var(--emerald)">307</span><span class="lbl">Distinct Orders</span></div>
+      <div class="kpi-chip"><span class="num" style="color:var(--purple)">92</span><span class="lbl">Customers</span></div>
+    </div>
+  </section>
+  <main class="wrap">
+    <div class="sec-label"><i class="fa-solid fa-lightbulb" style="color:var(--pink)"></i> Business Problem &amp; Solution</div>
+    <div class="case-grid">
+      <article class="case-card"><h3><i class="fa-solid fa-triangle-exclamation" style="color:var(--pink)"></i> The Problem</h3><p>Sales records span multiple years, product lines, markets, and deal sizes. Without a shared view, it is difficult to see which products and countries contribute most of the sales, how performance changes by year, and whether the dashboard’s order-level KPIs count actual orders or individual sales lines.</p></article>
+      <article class="case-card"><h3><i class="fa-solid fa-compass-drafting" style="color:var(--emerald)"></i> The Solution</h3><p>I built a Tableau dashboard using the workbook’s Sales sheet, with views for yearly sales trend, sales by country, product-line ranking, and deal-size mix. KPI definitions are checked against the source fields so sales lines, distinct orders, customers, and average values are clearly separated.</p><ul><li>Rank product lines and countries by total sales.</li><li>Compare yearly totals and deal-size contribution.</li><li>Distinguish line-item counts from distinct orders.</li></ul></article>
+    </div>
+
+    <div class="sec-label"><i class="fa-solid fa-image" style="color:var(--pink)"></i> Tableau Dashboard</div>
+    <div class="gallery"><div class="gallery-frame" onclick="openLb('assets/images/tableau-sales-dashboard.png')"><img src="assets/images/tableau-sales-dashboard.png" alt="Tableau sales dashboard with yearly trend, product line, deal size, country and KPI views" /></div><p class="caption">Click to enlarge the dashboard screenshot.</p></div>
+
+    <div class="sec-label"><i class="fa-solid fa-gauge-high" style="color:var(--pink)"></i> Metrics &amp; What They Mean</div>
+    <div class="metric-grid">
+      <article class="metric-card"><h3>Total Sales</h3><span class="metric-value">10,032,629</span><p>Sum of the SALES field across all 2,823 sales-line records.</p></article>
+      <article class="metric-card"><h3>Sales Lines</h3><span class="metric-value">2,823 rows</span><p>Counts source rows. The screenshot labels this as “Total Orders,” but ORDERNUMBER repeats across multiple product lines.</p></article>
+      <article class="metric-card"><h3>Distinct Orders</h3><span class="metric-value">307 orders</span><p>Count of unique ORDERNUMBER values. This is the order count when each order number is counted once.</p></article>
+      <article class="metric-card"><h3>Distinct Customers</h3><span class="metric-value">92 customers</span><p>Count of unique CUSTOMERNAME values.</p></article>
+      <article class="metric-card"><h3>Average Sales per Line</h3><span class="metric-value">3,554</span><p>Average of SALES over the 2,823 rows. This is what the screenshot labels “AOV”; it is an average line value.</p></article>
+      <article class="metric-card"><h3>Order-Level AOV</h3><span class="metric-value">About 32,680</span><p>Total Sales divided by 307 distinct orders. This derived measure is closer to average order value.</p></article>
+      <article class="metric-card"><h3>Sales by Product Line</h3><span class="metric-value">Classic Cars: 3.92M</span><p>Sum of SALES by PRODUCTLINE; Trains are the lowest product line at about 226K.</p></article>
+      <article class="metric-card"><h3>Sales by Country</h3><span class="metric-value">USA: 3.63M</span><p>Sum of SALES by COUNTRY. Spain and France follow at about 1.22M and 1.11M.</p></article>
+      <article class="metric-card"><h3>Sales by Deal Size</h3><span class="metric-value">Medium: 6.09M</span><p>Sum of SALES by DEALSIZE. Medium is largest, followed by Small (2.64M) and Large (1.30M).</p></article>
+      <article class="metric-card"><h3>Yearly Sales Trend</h3><span class="metric-value">2004: 4.72M</span><p>Sum of SALES by year of ORDERDATE. The source ends on 31 May 2005, so 2005 is a partial year.</p></article>
+    </div>
+    <p class="data-note"><strong>Metric clarification:</strong> The dashboard’s 2,823 “Total Orders” value is a row count, not a distinct order count. Its 3,554 “AOV” value is average sales per row. The Sales sheet contains 307 distinct order numbers, giving an order-level average of about 32,680 (Total Sales ÷ distinct orders). Values are shown in the source workbook’s units because no currency is specified.</p>
+
+    <div class="sec-label"><i class="fa-solid fa-chart-line" style="color:var(--pink)"></i> Key Findings</div>
+    <div class="insight-grid">
+      <article class="insight-card"><h3>Product Mix</h3><p>Classic Cars lead with 3.92M in sales. Trains are the lowest product line at 226K.</p></article>
+      <article class="insight-card"><h3>Market Mix</h3><p>The USA contributes 3.63M, followed by Spain at 1.22M and France at 1.11M.</p></article>
+      <article class="insight-card"><h3>Deal Size</h3><p>Medium deals contribute 6.09M, about 61% of the 10.03M total.</p></article>
+      <article class="insight-card"><h3>Year-over-Year Context</h3><p>2004 is the highest full year at 4.72M. The 2005 value covers January through May and should not be compared as a full year.</p></article>
+    </div>
+
+    <div class="sec-label"><i class="fa-solid fa-screwdriver-wrench" style="color:var(--pink)"></i> Tools &amp; Techniques</div>
+    <div class="tool-box"><span class="tool-pill"><i class="fa-solid fa-chart-column"></i> Tableau Public</span><span class="tool-pill"><i class="fa-solid fa-calculator"></i> SUM &amp; AVG</span><span class="tool-pill"><i class="fa-solid fa-hashtag"></i> Distinct Counts</span><span class="tool-pill"><i class="fa-solid fa-calendar"></i> Yearly Trend Analysis</span><span class="tool-pill"><i class="fa-solid fa-globe"></i> Country Segmentation</span></div>
+  </main>
+  <div class="lightbox" id="lb" onclick="closeLb()"><button class="lb-close" type="button" aria-label="Close image" onclick="event.stopPropagation();closeLb()"><i class="fa-solid fa-xmark"></i></button><img id="lbImg" src="" alt="" /></div>
+  <footer class="foot">Built by <a href="index.html">Ahmed Sherif</a> · Tableau · Sales Analytics</footer>
+  <script>function openLb(src){document.getElementById('lbImg').src=src;document.getElementById('lb').classList.add('open');document.body.style.overflow='hidden'}function closeLb(){document.getElementById('lb').classList.remove('open');document.body.style.overflow=''}document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLb()});</script>
+</body>
+</html>
