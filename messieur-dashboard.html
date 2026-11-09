@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MISUO Furniture Sales Dashboard | Ahmed Sherif</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#0b0f19;--surface:#101626;--card:rgba(255,255,255,.03);--border:rgba(255,255,255,.08);--text:#f8fafc;--muted:#94a3b8;--dim:#64748b;--amber:#fbbf24;--cyan:#38bdf8;--emerald:#34d399;--red:#f87171;--r:12px;--t:.2s cubic-bezier(.4,0,.2,1);--font:'Inter',system-ui,sans-serif}
+    body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh}
+    .topbar{position:sticky;top:0;z-index:100;background:rgba(11,15,25,.94);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:14px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+    .topbar-left{display:flex;align-items:center;gap:12px}.back-btn{display:inline-flex;align-items:center;gap:7px;color:var(--muted);text-decoration:none;font-size:.83rem;font-weight:500;padding:6px 13px;border:1px solid var(--border);border-radius:8px;transition:var(--t)}.back-btn:hover{color:var(--text);border-color:rgba(255,255,255,.2)}
+    .topbar-title{font-size:.95rem;font-weight:600}.topbar-title span,.amber{color:var(--amber)}.excel-badge{font-size:.7rem;font-weight:600;padding:4px 11px;background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.25);color:var(--amber);border-radius:999px;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap}
+    .hero{background:linear-gradient(135deg,#141008 0%,#0f1206 50%,#060707 100%);border-bottom:1px solid var(--border);padding:48px 24px 40px;text-align:center}.hero h1{font-size:clamp(1.5rem,3vw,2.15rem);font-weight:700;letter-spacing:-.025em;margin-bottom:10px}.hero h1 .accent{color:var(--amber)}.hero>p{color:var(--muted);font-size:.9rem;max-width:720px;margin:0 auto 25px;line-height:1.7}.period{font-size:.76rem!important;color:var(--dim)!important;margin:-12px auto 24px!important}
+    .kpi-row{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}.kpi-chip{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:999px;padding:9px 18px;display:flex;align-items:center;gap:9px}.kpi-chip .num{font-size:1rem;font-weight:700}.kpi-chip .lbl{font-size:.72rem;color:var(--muted);font-weight:500}
+    .wrap{max-width:1160px;margin:0 auto;padding:40px 24px 70px}.sec-label{font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--dim);margin-bottom:18px;display:flex;align-items:center;gap:8px}.sec-label::after{content:'';flex:1;height:1px;background:var(--border)}
+    .case-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(285px,1fr));gap:15px;margin-bottom:42px}.case-card,.metric-card,.insight-card,.tool-box{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:20px 22px}.case-card h3{font-size:.98rem;margin-bottom:10px}.case-card p,.case-card li{font-size:.82rem;color:var(--muted);line-height:1.7}.case-card ul{padding-left:19px;margin-top:9px}
+    .gallery-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(440px,1fr));gap:16px;margin-bottom:42px}.gallery-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:12px;overflow:hidden;transition:var(--t)}.gallery-card:hover{border-color:rgba(255,255,255,.17);transform:translateY(-2px)}.gallery-card img{width:100%;height:auto;max-height:390px;object-fit:contain;display:block;background:#080d17;border-radius:8px;cursor:zoom-in}.gallery-card h3{font-size:.88rem;margin:12px 4px 5px}.gallery-card p{font-size:.75rem;color:var(--muted);line-height:1.55;margin:0 4px 4px}
+    .metric-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:13px;margin-bottom:14px}.metric-card{padding:17px 18px}.metric-card h3{font-size:.86rem;margin-bottom:7px}.metric-card p{font-size:.77rem;line-height:1.6;color:var(--muted)}.metric-value{display:block;color:var(--amber);font-size:1.05rem;font-weight:700;margin-bottom:5px}.data-note{font-size:.76rem;color:var(--dim);line-height:1.65;margin:0 0 42px;padding:13px 15px;border-left:2px solid rgba(251,191,36,.45);background:rgba(251,191,36,.035);border-radius:0 8px 8px 0}
+    .insight-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:14px;margin-bottom:40px}.insight-card{padding:18px 19px}.insight-card h3{font-size:.88rem;margin-bottom:9px}.insight-card p{font-size:.79rem;line-height:1.65;color:var(--muted)}
+    .tool-box{display:flex;flex-wrap:wrap;gap:9px;padding:19px;margin-bottom:10px}.tool-pill{display:inline-flex;align-items:center;gap:7px;font-size:.78rem;padding:7px 12px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:999px;color:var(--muted)}.tool-pill i{color:var(--amber)}
+    .lightbox{display:none;position:fixed;inset:0;z-index:999;background:rgba(0,0,0,.94);backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:22px;cursor:zoom-out}.lightbox.open{display:flex}.lightbox img{max-width:96vw;max-height:90vh;object-fit:contain;border-radius:8px}.lb-close{position:fixed;top:16px;right:19px;background:rgba(255,255,255,.09);border:0;color:var(--text);font-size:1.2rem;width:40px;height:40px;border-radius:50%;cursor:pointer}
+    .foot{border-top:1px solid var(--border);text-align:center;padding:20px;font-size:.77rem;color:var(--dim)}.foot a{color:var(--amber);text-decoration:none}
+    @media(max-width:620px){.topbar{padding:12px 14px}.topbar-title{font-size:.82rem}.excel-badge{font-size:.61rem;padding:4px 8px}.hero{padding:32px 16px}.wrap{padding:28px 14px 52px}.gallery-grid{grid-template-columns:1fr}.gallery-card img{max-height:280px}}
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-left"><a href="index.html#projects" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Portfolio</a><span class="topbar-title"><span>MISUO</span> Furniture Dashboard</span></div>
+    <span class="excel-badge"><i class="fa-regular fa-file-excel"></i> Microsoft Excel · PivotTables</span>
+  </header>
+
+  <section class="hero">
+    <h1>MISUO Furniture <span class="accent">Sales &amp; Delivery</span> Dashboard</h1>
+    <p>An Excel dashboard built to identify top- and low-selling products, compare sales channels, and monitor delivery outcomes across 126 furniture order records.</p>
+    <p class="period">Order dates: 27 July–14 December 2024</p>
+    <div class="kpi-row">
+      <div class="kpi-chip"><span class="num amber">EGP 1.03M</span><span class="lbl">Sales from Delivered Orders</span></div>
+      <div class="kpi-chip"><span class="num" style="color:var(--cyan)">126</span><span class="lbl">Order Records</span></div>
+      <div class="kpi-chip"><span class="num" style="color:var(--emerald)">81%</span><span class="lbl">Delivered</span></div>
+      <div class="kpi-chip"><span class="num" style="color:var(--indigo)">56%</span><span class="lbl">Marked On Time</span></div>
+    </div>
+  </section>
+
+  <main class="wrap">
+    <div class="sec-label"><i class="fa-solid fa-lightbulb" style="color:var(--amber)"></i> Business Problem &amp; Solution</div>
+    <div class="case-grid">
+      <article class="case-card">
+        <h3><i class="fa-solid fa-triangle-exclamation" style="color:var(--amber)"></i> The Problem</h3>
+        <p>Furniture orders were recorded across detailed rows, making it hard to compare which product categories and sales platforms drove the most orders, where customers were concentrated, and whether deliveries met their target dates. The project brief focused on finding the best- and lowest-selling products.</p>
+      </article>
+      <article class="case-card">
+        <h3><i class="fa-solid fa-compass-drafting" style="color:var(--emerald)"></i> The Solution</h3>
+        <p>I built an interactive Excel dashboard with slicers for sales platform, product category, customer type, and governorate. PivotTables and charts summarize product and color demand, platform mix, order outcomes, and delivery timing.</p>
+        <ul>
+          <li>Compare product categories and sales channels to support stock and assortment decisions.</li>
+          <li>Track delivered, rejected, and returned orders alongside on-time delivery.</li>
+          <li>Filter demand by customer type and governorate to guide follow-up analysis.</li>
+        </ul>
+      </article>
+    </div>
+
+    <div class="sec-label"><i class="fa-solid fa-images" style="color:var(--amber)"></i> Dashboard &amp; Workbook Screenshots</div>
+    <div class="gallery-grid">
+      <article class="gallery-card"><img src="assets/images/misuo-dashboard.png" alt="MISUO Excel sales and delivery dashboard" onclick="openLb(this.src)" /><h3>Interactive Excel Dashboard</h3><p>Summary KPIs, slicers, platform mix, delivery outcomes, product demand, color, area, and customer type.</p></article>
+      <article class="gallery-card"><img src="assets/images/misuo-pivots.png" alt="MISUO supporting PivotTables and charts" onclick="openLb(this.src)" /><h3>PivotTable Analysis</h3><p>Supporting breakdowns for product color, delivery timing, order status, and delivered orders by area.</p></article>
+      <article class="gallery-card"><img src="assets/images/misuo-order-table.png" alt="Structured MISUO order table with personal identifiers cropped out" onclick="openLb(this.src)" /><h3>Structured Order Table</h3><p>Order attributes and delivery fields used to build the pivots. Customer identifiers and address columns are cropped out.</p></article>
+      <article class="gallery-card"><img src="assets/images/misuo-source-data.png" alt="MISUO order data fields with personal identifiers cropped out" onclick="openLb(this.src)" /><h3>Source Order Fields</h3><p>Product, platform, price, payment, and delivery-date fields. Customer names and addresses are excluded from this view.</p></article>
+    </div>
+
+    <div class="sec-label"><i class="fa-solid fa-gauge-high" style="color:var(--amber)"></i> KPIs &amp; What They Mean</div>
+    <div class="metric-grid">
+      <article class="metric-card"><h3>Delivered Sales</h3><span class="metric-value">EGP 1,029,330</span><p>Sum of listed sale prices for rows marked delivered. Rejected and returned rows are excluded from this sales subtotal.</p></article>
+      <article class="metric-card"><h3>Total Orders</h3><span class="metric-value">126 records</span><p>Counts all order rows, including delivered, rejected, and returned outcomes.</p></article>
+      <article class="metric-card"><h3>Average Selling Price</h3><span class="metric-value">EGP 10,261</span><p>Average sale price across all 126 order records.</p></article>
+      <article class="metric-card"><h3>Delivery Status</h3><span class="metric-value">81% delivered</span><p>102 delivered, 23 rejected, and 1 returned order record.</p></article>
+      <article class="metric-card"><h3>On-Time Delivery</h3><span class="metric-value">56% marked on time</span><p>70 records are labeled on time and 56 are labeled late in the timing-status field.</p></article>
+      <article class="metric-card"><h3>Orders by Platform</h3><span class="metric-value">Homzmart: 78 orders</span><p>Counts order records by marketplace; it does not compare sales revenue by channel.</p></article>
+      <article class="metric-card"><h3>Best-Selling Category</h3><span class="metric-value">Beds: 88 orders</span><p>Counts records by product category. Beds account for about 70% of all order rows.</p></article>
+      <article class="metric-card"><h3>Best-Selling Color</h3><span class="metric-value">Black: 46 entries</span><p>Counts populated metal-color values; 106 of the 126 order rows have a color entry.</p></article>
+      <article class="metric-card"><h3>Delivered Orders by Area</h3><span class="metric-value">Cairo leads: 47</span><p>Counts delivered orders by governorate in the filtered area PivotTable.</p></article>
+      <article class="metric-card"><h3>Customer Type Mix</h3><span class="metric-value">75 individuals · 3 companies</span><p>Counts distinct customer names by type; the 126 order rows include repeat orders.</p></article>
+    </div>
+    <p class="data-note"><strong>Metric scope:</strong> The EGP 1.03M sales figure is the subtotal for delivered orders, while Total Orders and Average Selling Price use all 126 rows. The dashboard’s color count excludes blank color entries. The data covers 27 July–14 December 2024.</p>
+
+    <div class="sec-label"><i class="fa-solid fa-chart-line" style="color:var(--cyan)"></i> What the Analysis Shows</div>
+    <div class="insight-grid">
+      <article class="insight-card"><h3>Product Demand</h3><p>Beds lead with 88 records (69.8%), followed by sofas with 18 (14.3%) and tables with 17 (13.5%). The remaining categories account for 3 records.</p></article>
+      <article class="insight-card"><h3>Delivery Outcomes</h3><p>102 records are marked delivered (81%), 23 rejected (18.3%), and 1 returned (0.8%). The timing field marks 70 on time and 56 late.</p></article>
+      <article class="insight-card"><h3>Channel Mix</h3><p>Homzmart accounts for 78 records (61.9%), Chic Homes for 16 (12.7%), and Oscar Riten for 13 (10.3%). The top three platforms make up about 85% of records.</p></article>
+      <article class="insight-card"><h3>Customer &amp; Color Mix</h3><p>The workbook contains 78 distinct customer names: 75 individuals and 3 companies. Black is the most frequent metal-color entry, followed by white (37) and gray (8).</p></article>
+    </div>
+    <p class="data-note"><strong>Analysis limitation:</strong> The workbook records rejected and delayed orders but does not include a rejection-reason field. The dashboard can show where outcomes differ, but it cannot establish why an order was rejected without additional data.</p>
+
+    <div class="sec-label"><i class="fa-solid fa-screwdriver-wrench" style="color:var(--amber)"></i> Tools &amp; Techniques</div>
+    <div class="tool-box">
+      <span class="tool-pill"><i class="fa-regular fa-file-excel"></i> Microsoft Excel</span>
+      <span class="tool-pill"><i class="fa-solid fa-table"></i> PivotTables</span>
+      <span class="tool-pill"><i class="fa-solid fa-chart-column"></i> PivotCharts</span>
+      <span class="tool-pill"><i class="fa-solid fa-filter"></i> Slicers</span>
+      <span class="tool-pill"><i class="fa-solid fa-boxes-stacked"></i> E-Commerce Analytics</span>
+      <span class="tool-pill"><i class="fa-solid fa-truck"></i> Delivery Performance</span>
+    </div>
+  </main>
+
+  <div class="lightbox" id="lb" onclick="closeLb()"><button class="lb-close" type="button" aria-label="Close image" onclick="event.stopPropagation();closeLb()"><i class="fa-solid fa-xmark"></i></button><img id="lbImg" src="" alt="" /></div>
+  <footer class="foot">Built by <a href="index.html">Ahmed Sherif</a> · Microsoft Excel · E-Commerce &amp; Delivery Analytics</footer>
+  <script>
+    function openLb(src){document.getElementById('lbImg').src=src;document.getElementById('lb').classList.add('open');document.body.style.overflow='hidden'}
+    function closeLb(){document.getElementById('lb').classList.remove('open');document.body.style.overflow=''}
+    document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLb()});
+  </script>
+</body>
+</html>

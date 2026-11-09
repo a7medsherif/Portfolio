@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Salla Call Center Dashboard | Ahmed Sherif</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0b0f19;
+      --surface: #101626;
+      --card: rgba(255,255,255,0.03);
+      --border: rgba(255,255,255,0.08);
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --dim: #64748b;
+      --cyan: #38bdf8;
+      --emerald: #34d399;
+      --amber: #fbbf24;
+      --indigo: #818cf8;
+      --r: 12px;
+      --t: 0.2s cubic-bezier(.4,0,.2,1);
+      --font: 'Inter', system-ui, sans-serif;
+    }
+    body { background: var(--bg); color: var(--text); font-family: var(--font); min-height: 100vh; }
+
+    /* TOP BAR */
+    .topbar {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(11,15,25,0.92); backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 32px;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    }
+    .topbar-left { display: flex; align-items: center; gap: 12px; }
+    .back-btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      color: var(--muted); text-decoration: none; font-size: 0.83rem; font-weight: 500;
+      padding: 6px 13px; border: 1px solid var(--border); border-radius: 8px;
+      transition: var(--t);
+    }
+    .back-btn:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+    .topbar-title { font-size: 0.95rem; font-weight: 600; }
+    .topbar-title span { color: var(--cyan); }
+    .pbix-badge {
+      font-size: 0.7rem; font-weight: 600; padding: 3px 10px;
+      background: rgba(56,189,248,0.1); border: 1px solid rgba(56,189,248,0.25);
+      color: var(--cyan); border-radius: 999px; text-transform: uppercase; letter-spacing: 0.06em;
+    }
+
+    /* HERO */
+    .hero {
+      background: linear-gradient(135deg,#0d1830 0%,#0b1525 60%,#060b15 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 52px 32px 44px; text-align: center;
+    }
+    .hero h1 { font-size: clamp(1.5rem,3vw,2.1rem); font-weight: 700; letter-spacing:-0.025em; margin-bottom: 10px; }
+    .hero h1 .c { color: var(--cyan); }
+    .hero p { color: var(--muted); font-size: 0.88rem; max-width: 580px; margin: 0 auto 32px; line-height: 1.7; }
+
+    /* KPI ROW */
+    .kpi-row { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
+    .kpi-chip {
+      background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+      border-radius: 999px; padding: 9px 22px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .kpi-chip .num { font-size: 1.05rem; font-weight: 700; }
+    .kpi-chip .lbl { font-size: 0.74rem; color: var(--muted); font-weight: 500; }
+    .kpi-chip .delta { font-size: 0.7rem; font-weight: 600; padding: 2px 7px; border-radius: 999px; }
+    .du { background: rgba(52,211,153,.12); color: var(--emerald); }
+    .dd { background: rgba(251,191,36,.12); color: var(--amber); }
+
+    /* MAIN CONTENT */
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 44px 24px 72px; }
+
+    /* COVER IMAGE */
+    .cover-section { margin-bottom: 48px; }
+    .cover-label { font-size: 0.75rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: .08em; color: var(--dim); margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+    .cover-label::after { content:''; flex:1; height:1px; background: var(--border); }
+    .cover-frame {
+      width: 100%; border: 1px solid var(--border); border-radius: var(--r);
+      overflow: hidden; cursor: zoom-in;
+      transition: border-color var(--t), box-shadow var(--t);
+    }
+    .cover-frame:hover { border-color: rgba(56,189,248,.35); box-shadow: 0 0 48px rgba(56,189,248,.07); }
+    .cover-frame img { width: 100%; height: auto; display: block; }
+    .zoom-hint { text-align: center; font-size: 0.74rem; color: var(--dim); margin-top: 9px;
+      display: flex; align-items: center; justify-content: center; gap: 6px; }
+
+    /* PAGES GRID */
+    .pages-label { font-size: 0.75rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: .08em; color: var(--dim); margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+    .pages-label::after { content:''; flex:1; height:1px; background: var(--border); }
+    .pages-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap: 16px; margin-bottom: 48px; }
+    .case-study-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); gap: 16px; margin-bottom: 48px; }
+    .case-study-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--r); padding: 22px; }
+    .case-study-card h3 { font-size: 1rem; margin-bottom: 10px; }
+    .case-study-card p, .case-study-card li { color: var(--muted); font-size: .84rem; line-height: 1.7; }
+    .case-study-card ul { padding-left: 19px; margin-top: 10px; }
+    .measures-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap: 14px; margin-bottom: 12px; }
+    .measure-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--r); padding: 18px; }
+    .measure-card h3 { font-size: .9rem; margin-bottom: 7px; }
+    .measure-card p { color: var(--muted); font-size: .79rem; line-height: 1.6; }
+    .measure-note { color: var(--dim); font-size: .75rem; line-height: 1.6; margin: 0 0 48px; }
+    .page-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: var(--r);
+      padding: 22px 20px; transition: border-color var(--t), transform var(--t);
+    }
+    .page-card:hover { border-color: rgba(255,255,255,.18); transform: translateY(-2px); }
+    .page-shot { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; display: block; border-radius: 8px; margin-bottom: 14px; cursor: zoom-in; }
+    .detail-gallery { display: grid; grid-template-columns: repeat(auto-fit,minmax(300px,1fr)); gap: 16px; margin: 0 0 48px; }
+    .detail-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--r); padding: 16px; transition: border-color var(--t), transform var(--t); }
+    .detail-card:hover { border-color: rgba(255,255,255,.18); transform: translateY(-2px); }
+    .detail-card img { width: 100%; aspect-ratio: 2 / 1; object-fit: cover; display: block; border-radius: 8px; cursor: zoom-in; }
+    .detail-card h3 { font-size: .95rem; font-weight: 600; margin: 13px 0 5px; }
+    .detail-card p { color: var(--muted); font-size: .8rem; line-height: 1.6; }
+    .page-num { font-size: 0.7rem; font-weight: 600; color: var(--dim); text-transform: uppercase;
+      letter-spacing: .07em; margin-bottom: 10px; }
+    .page-icon { font-size: 1.3rem; margin-bottom: 12px; }
+    .page-card h3 { font-size: 0.95rem; font-weight: 600; margin-bottom: 8px; }
+    .page-card p { font-size: 0.8rem; color: var(--muted); line-height: 1.6; margin-bottom: 14px; }
+    .chip-row { display: flex; flex-wrap: wrap; gap: 6px; }
+    .chip {
+      font-size: 0.72rem; font-weight: 500; padding: 3px 9px;
+      background: rgba(255,255,255,.04); border: 1px solid var(--border);
+      border-radius: 999px; color: var(--muted);
+      display: flex; align-items: center; gap: 5px;
+    }
+    .chip i { font-size: .68rem; }
+    .cc { color: var(--cyan); } .ce { color: var(--emerald); }
+    .ca { color: var(--amber); } .ci { color: var(--indigo); }
+
+    /* TOOLS */
+    .tools-box {
+      background: var(--card); border: 1px solid var(--border); border-radius: var(--r);
+      padding: 24px 28px; margin-bottom: 32px;
+    }
+    .tools-box h4 { font-size: 0.75rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: .07em; color: var(--dim); margin-bottom: 14px; }
+    .tools-flex { display: flex; flex-wrap: wrap; gap: 10px; }
+    .tool-pill {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 0.82rem; font-weight: 500; padding: 8px 16px;
+      background: rgba(255,255,255,.04); border: 1px solid var(--border);
+      border-radius: 999px; color: var(--text);
+    }
+    .tool-pill i { color: var(--cyan); }
+
+    /* LIGHTBOX */
+    .lightbox {
+      display: none; position: fixed; inset: 0; z-index: 999;
+      background: rgba(0,0,0,.93); backdrop-filter: blur(8px);
+      cursor: zoom-out; align-items: center; justify-content: center; padding: 20px;
+    }
+    .lightbox.open { display: flex; }
+    .lightbox img { max-width: 95vw; max-height: 90vh; border-radius: 8px; object-fit: contain; }
+    .lb-close {
+      position: fixed; top: 18px; right: 22px;
+      background: rgba(255,255,255,.08); border: none; color: var(--text);
+      font-size: 1.2rem; width: 38px; height: 38px; border-radius: 50%;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: var(--t);
+    }
+    .lb-close:hover { background: rgba(255,255,255,.15); }
+
+    /* FOOTER */
+    .foot { border-top: 1px solid var(--border); text-align: center;
+      padding: 20px; font-size: 0.77rem; color: var(--dim); }
+    .foot a { color: var(--cyan); text-decoration: none; }
+    .foot a:hover { text-decoration: underline; }
+
+    @media(max-width:600px) {
+      .hero { padding: 32px 16px 28px; }
+      .topbar { padding: 12px 16px; }
+      .wrap { padding: 28px 14px 56px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <a href="index.html#projects" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Portfolio</a>
+    <span class="topbar-title"><span>Salla</span> Call Center Dashboard</span>
+  </div>
+  <span class="pbix-badge"><i class="fa-solid fa-chart-bar"></i> Power BI · 4 Pages</span>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>Salla <span class="c">Call Center</span> Performance Dashboard</h1>
+  <p>A four-page Power BI case study for monitoring call demand, service speed, service-level performance, and agent workload across monthly call-center data.</p>
+  <div class="kpi-row">
+    <div class="kpi-chip">
+      <span class="num cc">18,560</span>
+      <span class="lbl">Total Calls</span>
+      <span class="delta du">▲ 12.5%</span>
+    </div>
+    <div class="kpi-chip">
+      <span class="num ce">94%</span>
+      <span class="lbl">CSAT Score</span>
+      <span class="delta du">▲ 8.2%</span>
+    </div>
+    <div class="kpi-chip">
+      <span class="num ca">00:01:32</span>
+      <span class="lbl">Avg Response Time</span>
+      <span class="delta dd">▼ 6.1%</span>
+    </div>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div class="wrap">
+
+  <!-- BUSINESS PROBLEM AND SOLUTION -->
+  <div class="pages-label"><i class="fa-solid fa-lightbulb ci"></i> Business Problem &amp; Solution</div>
+  <div class="case-study-grid">
+    <article class="case-study-card">
+      <h3><i class="fa-solid fa-triangle-exclamation ca"></i> The Problem</h3>
+      <p>Call-center managers need to understand when call demand is rising, whether calls are being answered within target, and which agents or contact reasons need attention. Looking at monthly totals alone makes it difficult to spot service bottlenecks and their causes.</p>
+    </article>
+    <article class="case-study-card">
+      <h3><i class="fa-solid fa-compass-drafting ce"></i> The Solution</h3>
+      <p>I built a four-page Power BI report with month, project, and agent filters. Monthly call tables are connected to shared Calendar and Agent tables, then shown through an overview, call trends, agent performance, and a root-cause page.</p>
+      <ul>
+        <li>Compare actual call volume with forecast and service targets.</li>
+        <li>Find busy periods and agents with higher wait or abandonment measures.</li>
+        <li>Use the decomposition tree to explore drivers by agent, month, and day.</li>
+      </ul>
+    </article>
+  </div>
+  <!-- COVER -->
+  <div class="cover-section">
+    <div class="cover-label"><i class="fa-solid fa-image cc"></i> Dashboard Cover Page — Home</div>
+    <div class="cover-frame" onclick="openLb('assets/images/salla-home.jpg')">
+      <img src="assets/images/salla-home.jpg" alt="Salla Call Center Dashboard — Home Page" />
+    </div>
+    <p class="zoom-hint"><i class="fa-solid fa-magnifying-glass-plus"></i> Click to enlarge</p>
+  </div>
+
+  <!-- PAGES -->
+  <div class="pages-label"><i class="fa-solid fa-layer-group ci"></i> Report Pages Breakdown</div>
+  <div class="pages-grid">
+
+    <div class="page-card">
+      <img class="page-shot" src="assets/images/salla-report-home.png" alt="Salla dashboard Home report page" onclick="openLb(this.src)" />
+      <div class="page-num">Page 1</div>
+      <div class="page-icon">🏠</div>
+      <h3>Home</h3>
+      <p>Landing overview with headline KPIs — Total Calls, CSAT, and Avg Response Time — plus navigation buttons to each analytical page.</p>
+      <div class="chip-row">
+        <span class="chip"><i class="fa-solid fa-gauge cc"></i> KPI Cards</span>
+        <span class="chip"><i class="fa-solid fa-hand-pointer ci"></i> Nav Buttons</span>
+      </div>
+    </div>
+
+    <div class="page-card">
+      <img class="page-shot" src="assets/images/salla-report-calls.png" alt="Salla Calls Analysis report page" onclick="openLb(this.src)" />
+      <div class="page-num">Page 2</div>
+      <div class="page-icon">📞</div>
+      <h3>Calls Analysis</h3>
+      <p>Deep-dive into call volume trends — peak hours, daily & weekly patterns, inbound vs outbound breakdowns, and resolution rate tracking.</p>
+      <div class="chip-row">
+        <span class="chip"><i class="fa-solid fa-chart-line ce"></i> Line Chart</span>
+        <span class="chip"><i class="fa-solid fa-chart-bar ca"></i> Bar Chart</span>
+        <span class="chip"><i class="fa-solid fa-chart-column ci"></i> Combo</span>
+      </div>
+    </div>
+
+    <div class="page-card">
+      <img class="page-shot" src="assets/images/salla-report-agents.png" alt="Salla Agent Analysis report page" onclick="openLb(this.src)" />
+      <div class="page-num">Page 3</div>
+      <div class="page-icon">👥</div>
+      <h3>Agent Analysis</h3>
+      <p>Individual agent performance — call handling rate, average handle time, CSAT score per agent, and leaderboard-style ranking.</p>
+      <div class="chip-row">
+        <span class="chip"><i class="fa-solid fa-chart-bar cc"></i> Agent Ranking</span>
+        <span class="chip"><i class="fa-solid fa-chart-column ce"></i> Combo</span>
+        <span class="chip"><i class="fa-solid fa-chart-line ca"></i> Trend</span>
+      </div>
+    </div>
+
+    <div class="page-card">
+      <img class="page-shot" src="assets/images/salla-report-why.png" alt="Salla Root Cause report page" onclick="openLb(this.src)" />
+      <div class="page-num">Page 4</div>
+      <div class="page-icon">🔍</div>
+      <h3>Why (Root Cause)</h3>
+      <p>Decomposition tree analysis of contact reasons — identifying top drivers behind customer calls to reduce repeat contacts and improve self-service.</p>
+      <div class="chip-row">
+        <span class="chip"><i class="fa-solid fa-sitemap ca"></i> Decomposition Tree</span>
+        <span class="chip"><i class="fa-solid fa-chart-bar ce"></i> Bar Chart</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- KEY MEASURES -->
+  <div class="pages-label"><i class="fa-solid fa-gauge-high cc"></i> Key Measures &amp; What They Show</div>
+  <div class="measures-grid">
+    <article class="measure-card"><h3>Total Calls</h3><p>Tracks call volume for the selected month, project, or other active filters.</p></article>
+    <article class="measure-card"><h3>Handling Rate</h3><p>Shows the share of calls handled compared with the calls offered.</p></article>
+    <article class="measure-card"><h3>Abandonment Rate</h3><p>Shows the share of offered calls that customers leave before an agent answers.</p></article>
+    <article class="measure-card"><h3>ASA</h3><p>Average Speed of Answer: the average time a caller waits before an agent answers.</p></article>
+    <article class="measure-card"><h3>Service Level</h3><p>Shows the share of calls answered within the report’s defined time threshold.</p></article>
+    <article class="measure-card"><h3>Handled Within Threshold</h3><p>Counts calls answered within the service-level target.</p></article>
+    <article class="measure-card"><h3>Forecast vs. Actual</h3><p>Compares forecasted and actual call volume by month to show where demand differs from plan.</p></article>
+    <article class="measure-card"><h3>Agent Performance</h3><p>Compares handled calls, ASA, and abandoned calls by agent to help locate workload and service differences.</p></article>
+    <article class="measure-card"><h3>ASA Trend</h3><p>Compares ASA with the prior month. An upward arrow means answer time increased; for ASA, lower is usually better.</p></article>
+    <article class="measure-card"><h3>Handled Calls &amp; Total Abandon</h3><p>Show the counts of calls answered by agents and calls abandoned before answer.</p></article>
+    <article class="measure-card"><h3>Difference Measures</h3><p>Calls Diff, ASA Diff, Diff Handling, and Service Diff quantify changes against the report’s comparison period.</p></article>
+    <article class="measure-card"><h3>Trend Indicators</h3><p>Calls, handling, service, and abandonment trend measures show direction of change. Whether an increase is good depends on the KPI.</p></article>
+  </div>
+  <p class="measure-note">Measure values change with the report filters. Handling Rate and Service Level use the definitions and threshold configured in this report.</p>
+  <!-- MODEL AND DAX SCREENSHOTS -->
+  <div class="pages-label"><i class="fa-solid fa-diagram-project ci"></i> Data Model &amp; DAX Details</div>
+  <div class="detail-gallery">
+    <article class="detail-card">
+      <img src="assets/images/salla-data-model.png" alt="Salla Power BI data model and table relationships" onclick="openLb(this.src)" />
+      <h3>Data Model</h3>
+      <p>Relationships between agent, calendar, and monthly call tables.</p>
+    </article>
+    <article class="detail-card">
+      <img src="assets/images/salla-dax-measure.png" alt="DAX formula for ASA trend measure" onclick="openLb(this.src)" />
+      <h3>DAX Measure</h3>
+      <p>Month-over-month ASA trend calculation used in the report.</p>
+    </article>
+  </div>
+  <!-- TOOLS -->
+  <div class="tools-box">
+    <h4>Tools &amp; Technologies Used</h4>
+    <div class="tools-flex">
+      <span class="tool-pill"><i class="fa-solid fa-chart-pie"></i> Power BI Desktop</span>
+      <span class="tool-pill"><i class="fa-solid fa-code"></i> DAX Measures</span>
+      <span class="tool-pill"><i class="fa-solid fa-database"></i> Data Modeling</span>
+      <span class="tool-pill"><i class="fa-solid fa-headset"></i> Call Center Analytics</span>
+      <span class="tool-pill"><i class="fa-solid fa-star"></i> CSAT Tracking</span>
+      <span class="tool-pill"><i class="fa-solid fa-sitemap"></i> Decomposition Tree</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lb" onclick="closeLb()">
+  <button class="lb-close" onclick="closeLb()"><i class="fa-solid fa-xmark"></i></button>
+  <img id="lbImg" src="" alt="" />
+</div>
+
+<!-- FOOTER -->
+<div class="foot">Built by <a href="index.html">Ahmed Sherif</a> · Power BI · DAX · Customer Service Analytics</div>
+
+<script>
+  function openLb(src) {
+    document.getElementById('lbImg').src = src;
+    document.getElementById('lb').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLb() {
+    document.getElementById('lb').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', e => { if(e.key==='Escape') closeLb(); });
+</script>
+</body>
+</html>
